@@ -1,0 +1,32 @@
+
+.c {
+    background-color: crimson;
+    border-radius: 1em;
+    margin-top: 10px;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    background-color: black;
+}
+
+.progress-bar {
+    height: 2em;
+    background-color: black;
+    margin: 10px;
+    border-radius: 1em;
+}
+
+h1 {
+    margin: 10px;
+    font-size: 86px;
+}
+
+.n {
+    background-color: crimson;
+}
+
+
+
+
