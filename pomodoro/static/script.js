@@ -1,23 +1,26 @@
 
 function decrease_counter(){
+    let seconds = localStorage.getItem("learn") * 60 - 1;
+    let min = Math.floor((seconds) / 60)
+    let sec = seconds % 60
     let counter = document.querySelector("#counter")
-    const start_date = new Date()
+    counter.innerHTML = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
     const decrease = setInterval(() => {
-        const d = new Date();
-        let min = 24 + Math.ceil((start_date - d) / 60000)%60
-        let sec = 59 + Math.ceil((start_date - d) / 1000)%60
-        if(min===0 && sec===0){
+        seconds --;
+        min = Math.floor((seconds) / 60)
+        sec = seconds % 60
+        if(seconds === 0) {
             clearInterval(decrease)
         }
-        String(min).padStart(2,'0')
-
-
         counter.innerHTML = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
-    });
+    },1000);
 
 
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector("#start").onclick = decrease_counter
+    if (!localStorage.getItem('learn')) {
+        localStorage.setItem('learn', '24');
+    }
+    document.querySelector("#start").onclick = decrease_counter;
 })
