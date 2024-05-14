@@ -1,4 +1,13 @@
+import time
+
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+
+class User(AbstractUser):
+    short_break = models.IntegerField(default=300)
+    long_break = models.IntegerField(default=900)
+    run_time = models.IntegerField(default=1500)
 
 
 class Vehicle(models.Model):
@@ -12,17 +21,8 @@ class Vehicle(models.Model):
         }
 
 
-class Session(models.Model):
-    start_time = models.DateTimeField()
-    ended = models.BooleanField()
-    end_time = models.DateTimeField()
-    run_number = models.IntegerField(default=8)
-    short_break = models.IntegerField(default=300)
-    long_break = models.IntegerField(default=900)
-    run_time = models.IntegerField(default=1500)
-
-
 class Run(models.Model):
     completed = models.BooleanField()
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="runs")
-    session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name="runs")
+    start_time = models.DateTimeField()
+
