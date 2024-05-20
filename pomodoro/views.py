@@ -20,9 +20,7 @@ def login_view(request):
     if request.method == 'POST':
         name = request.POST.get("username")
         password = request.POST.get("password")
-        print(f"{name} {password}")
         user = authenticate(request, username=name, password=password)
-        print(user)
         if user:
             login(request, user)
             return HttpResponseRedirect(reverse('index'))
@@ -60,5 +58,12 @@ def add_run(request):
         JsonResponse({"vehicle": v.serialize()})
 
 
+@csrf_exempt
+@login_required
+def get_vehicle(request):
+    vehicle_number = int(request.GET.get("vnum"))
+    # Get random vehicle from set stage
+    vehicle = Vehicle.objects.filter(stage=vehicle_number).order_by('?').first()
+    return JsonResponse(vehicle.serialized())
 
 

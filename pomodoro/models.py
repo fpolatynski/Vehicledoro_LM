@@ -13,11 +13,13 @@ class User(AbstractUser):
 class Vehicle(models.Model):
     name = models.CharField(max_length=64)
     image = models.CharField(max_length=128)
+    stage = models.IntegerField(default=0)
 
     def serialized(self):
         return {
             "name": self.name,
-            "image": self.image
+            "image": self.image,
+            "stage": self.stage,
         }
 
 
