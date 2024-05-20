@@ -20,7 +20,9 @@ def login_view(request):
     if request.method == 'POST':
         name = request.POST.get("username")
         password = request.POST.get("password")
+        print(f"{name} {password}")
         user = authenticate(request, username=name, password=password)
+        print(user)
         if user:
             login(request, user)
             return HttpResponseRedirect(reverse('index'))
@@ -31,7 +33,7 @@ def register(request):
     if request.method == 'POST':
         name = request.POST.get("username")
         password = request.POST.get("password")
-        user = User(username=name, password=password)
+        user = User.objects.create_user(name, "foo@.c", password)
         user.save()
         login(request, user)
         return HttpResponseRedirect(reverse('index'))
