@@ -1,20 +1,38 @@
-
-async function decrease_counter(){
-    let run_number = 0;
-    let pause = false;
+let LEARN = 1500;
+let BREAK = 300;
+let LONG_BREAK = 900;
+async function decrease_counter(level, state){
+    let start = new Audio("/static/audio/stop.mp3");
+    let stop = new Audio("/static/audio/stop.mp3");
     let seconds = localStorage.getItem("learn") - 1;
     let min = Math.floor((seconds) / 60)
     let sec = seconds % 60
     let counter = document.querySelector("#counter")
     counter.innerHTML = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
-    document.querySelector("#vehicle_image").src = `/static/${await get_vehicle(1)}`
-    const decrease = setInterval(() => {
+    const decrease = setInterval(async () => {
         seconds --;
         min = Math.floor((seconds) / 60)
         sec = seconds % 60
         if(seconds === 0) {
-            clearInterval(decrease)
-            // TODO: Start new run/pause or end session
+            if (state === 0) {
+                await stop.play();
+                level ++;
+                if (level % 4 === 0) {
+                    document.querySelector("#vehicle_image").src = `/static/${await get_vehicle(98)}`;
+                    seconds = LONG_BREAK;
+                    state = 2;
+                } else {
+                    document.querySelector("#vehicle_image").src = `/static/${await get_vehicle(99)}`;
+                    seconds = BREAK;
+                    state = 1;
+                }
+            } else {
+                document.querySelector("#vehicle_image").src = `/static/${await get_vehicle(level)}`;
+                await start.play()
+                seconds = LEARN;
+                state = 0;
+            }
+            // search settings for time for current state
         }
         counter.innerHTML = `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
     },1000);
@@ -25,15 +43,31 @@ async function decrease_counter(){
     b.onclick = () => {
         localStorage.setItem("learn", seconds.toString())
         clearInterval(decrease);
-        b.onclick = decrease_counter;
+        b.onclick = () => {
+            decrease_counter(level, state);
+        };
         b.innerHTML = "Continue";
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    localStorage.setItem('learn', '1500');
-    document.querySelector("#start").onclick = decrease_counter;
+    main()
 })
+
+function main(){
+    localStorage.setItem('learn', LEARN.toString());
+    let level = 0;
+    /*
+    0 - learning
+    1 - short break
+    2 - long break
+     */
+    let state = 0;
+    document.querySelector("#start").onclick = async () => {
+        document.querySelector("#vehicle_image").src = `/static/${await get_vehicle(level)}`
+        decrease_counter(0, 0).then();
+    }
+}
 
 async function get_vehicle(number){
     let image_link = "images/question.png";
