@@ -9,6 +9,13 @@ class User(AbstractUser):
     long_break = models.IntegerField(default=900)
     run_time = models.IntegerField(default=1500)
 
+    def serializes(self):
+        return {
+            "short": self.short_break,
+            "long": self.long_break,
+            "learn": self.run_time,
+        }
+
 
 class Vehicle(models.Model):
     name = models.CharField(max_length=64)

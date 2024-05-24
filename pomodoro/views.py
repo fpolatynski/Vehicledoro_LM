@@ -67,3 +67,7 @@ def get_vehicle(request):
     return JsonResponse(vehicle.serialized())
 
 
+def get_settings(request):
+    user = User.objects.get(pk=request.user.id)
+    return JsonResponse(user.serializes())
+

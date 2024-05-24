@@ -1,7 +1,7 @@
-let LEARN = 1500;
-let BREAK = 300;
-let LONG_BREAK = 900;
-async function decrease_counter(level, state){
+async function decrease_counter(level, state, data){
+    let LEARN = data["learn"];
+    let BREAK = data["short"];
+    let LONG_BREAK = data["long"];
     let start = new Audio("/static/audio/stop.mp3");
     let stop = new Audio("/static/audio/stop.mp3");
     let seconds = localStorage.getItem("learn") - 1;
@@ -51,11 +51,10 @@ async function decrease_counter(level, state){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    main()
+    main().then()
 })
 
-function main(){
-    localStorage.setItem('learn', LEARN.toString());
+async function main(){
     let level = 0;
     /*
     0 - learning
@@ -63,9 +62,14 @@ function main(){
     2 - long break
      */
     let state = 0;
+
+    // Get settings from database
+    let response = await fetch("get_settings")
+    let data = await response.json()
+    localStorage.setItem('learn', data["learn"]);
     document.querySelector("#start").onclick = async () => {
         document.querySelector("#vehicle_image").src = `/static/${await get_vehicle(level)}`
-        decrease_counter(0, 0).then();
+        decrease_counter(0, 0, data).then();
     }
 }
 
