@@ -71,3 +71,9 @@ def get_settings(request):
     user = User.objects.get(pk=request.user.id)
     return JsonResponse(user.serializes())
 
+
+def settings(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        print(data)
+    return render(request, "pomodoro/settings.html")

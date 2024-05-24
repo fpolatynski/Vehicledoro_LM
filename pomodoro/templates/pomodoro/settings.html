@@ -1,0 +1,38 @@
+{% extends "pomodoro/layout.html" %}
+{% load static %}
+
+{% block imports %}
+    <script src="{% static 'script.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+
+    <div class="container text-center c" style="height: 90vh;">
+        <form action="" method="post">
+            <div class="row">
+                <div class="col">
+                    <label for="learn">Learn time: </label>
+                    <input id="learn" type="number" value="1500">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="break">Short break time: </label>
+                    <input id="break" type="number" value="300">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="long_break">Long break time: </label>
+                    <input id="long_break" type="number" value="900">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input type="submit" value="Save changes">
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
