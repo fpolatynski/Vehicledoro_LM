@@ -1,5 +1,3 @@
-import time
-
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -16,6 +14,9 @@ class User(AbstractUser):
             "learn": self.run_time,
         }
 
+    def __str__(self):
+        return f"{self.username.upper()}: break: {self.short_break} learn: {self.run_time} long break: {self.long_break}"
+
 
 class Vehicle(models.Model):
     name = models.CharField(max_length=64)
@@ -29,9 +30,12 @@ class Vehicle(models.Model):
             "stage": self.stage,
         }
 
+    def __str__(self):
+        return f"{self.name}: {self.stage}"
+
 
 class Run(models.Model):
     completed = models.BooleanField()
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="runs")
-    start_time = models.DateTimeField()
-
+    time = models.DateTimeField(auto_now_add=True, blank=True)
+    user = models.ForeignKey(User, default=User.objects.get(pk=1), on_delete=models.CASCADE, related_name="runs")

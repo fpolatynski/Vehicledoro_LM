@@ -74,6 +74,20 @@ def get_settings(request):
 
 def settings(request):
     if request.method == "POST":
-        data = json.loads(request.body)
-        print(data)
+        data = request.POST
+        user = User.objects.get(pk=request.user.id)
+        user.long_break = data.get("long_break")
+        user.short_break = data.get("break")
+        user.run_time = data.get("learn")
+        user.save()
+        return HttpResponseRedirect(reverse("index"))
     return render(request, "pomodoro/settings.html")
+
+
+def save_car(request):
+    image = request.GET.get("car")
+    user = User.objects.get(pk=request.user.id)
+    vehicle = Vehicle.objects.get(image=image)
+    run = Run(completed=True, vehicle=vehicle,  user=user)
+    run.save()
+    return JsonResponse({"filip": "present"})

@@ -1,4 +1,4 @@
-async function decrease_counter(level, state, data){
+async function decrease_counter(level, state, data, car){
     let LEARN = data["learn"];
     let BREAK = data["short"];
     let LONG_BREAK = data["long"];
@@ -15,6 +15,7 @@ async function decrease_counter(level, state, data){
         sec = seconds % 60
         if(seconds === 0) {
             if (state === 0) {
+                save_car(car)
                 await stop.play();
                 level ++;
                 if (level % 4 === 0) {
@@ -27,7 +28,8 @@ async function decrease_counter(level, state, data){
                     state = 1;
                 }
             } else {
-                document.querySelector("#vehicle_image").src = `/static/${await get_vehicle(level)}`;
+                car = await get_vehicle(level)
+                document.querySelector("#vehicle_image").src = `/static/${car}`;
                 await start.play()
                 seconds = LEARN;
                 state = 0;
@@ -68,8 +70,9 @@ async function main(){
     let data = await response.json()
     localStorage.setItem('learn', data["learn"]);
     document.querySelector("#start").onclick = async () => {
-        document.querySelector("#vehicle_image").src = `/static/${await get_vehicle(level)}`
-        decrease_counter(0, 0, data).then();
+        let car = await get_vehicle(level)
+        document.querySelector("#vehicle_image").src = `/static/${car}`
+        decrease_counter(0, 0, data, car).then();
     }
 }
 
@@ -79,4 +82,8 @@ async function get_vehicle(number){
     const data = await response.json();
     image_link = data["image"];
     return image_link;
+}
+
+function save_car(car){
+    fetch(`save_car?car=${car}`).then()
 }
