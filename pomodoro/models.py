@@ -37,5 +37,5 @@ class Vehicle(models.Model):
 class Run(models.Model):
     completed = models.BooleanField()
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="runs")
-    time = models.DateTimeField(auto_now_add=True, blank=True)
+    time = models.DateTimeField(auto_now=True, blank=True)
     user = models.ForeignKey(User, default=User.objects.get(pk=1), on_delete=models.CASCADE, related_name="runs")

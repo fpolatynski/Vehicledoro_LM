@@ -46,7 +46,7 @@ async function decrease_counter(level, state, data, car){
         localStorage.setItem("learn", seconds.toString())
         clearInterval(decrease);
         b.onclick = () => {
-            decrease_counter(level, state);
+            decrease_counter(level, state, data, car);
         };
         b.innerHTML = "Continue";
     }
